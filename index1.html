@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tezkor Reaktsiya O'yini</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Poppins / Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .glow-effect {
+            box-shadow: 0 0 25px rgba(99, 102, 241, 0.5);
+        }
+        .glow-text {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        .pulse-animation {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        .shake-animation {
+            animation: shake 0.4s ease-in-out;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        /* Hide scrollbars for slick look */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-white min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="w-full bg-slate-900/80 backdrop-blur-md border-b border-slate-800 p-4 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('home')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-xl font-black shadow-lg">
+                    ⚡
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg sm:text-xl tracking-wider bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">
+                        TEZKOR REAKTSIONAL
+                    </h1>
+                    <p class="text-xs text-slate-400 hidden sm:block">Zukkolik va Reaktsiya Sinovi</p>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-2">
+                <!-- User Profile Indicator -->
+                <button onclick="openNameModal()" class="px-3 py-1.5 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 hover:bg-indigo-500/20 text-xs sm:text-sm font-semibold flex items-center space-x-2">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="headerUserName">O'yinchi</span>
+                </button>
+                <button id="soundToggle" onclick="toggleSound()" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all border border-slate-700">
+                    <i id="soundIcon" class="fas fa-volume-up text-lg"></i>
+                </button>
+                <button onclick="switchTab('stats')" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all border border-slate-700 flex items-center space-x-2">
+                    <i class="fas fa-trophy text-amber-400 text-lg"></i>
+                    <span class="text-sm font-semibold hidden sm:inline">Reyting</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <!-- Nickname Registration Modal -->
+    <div id="nameModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-sm w-full text-center space-y-5 shadow-2xl">
+            <div class="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-pink-500 rounded-2xl flex items-center justify-center text-white text-3xl mx-auto shadow-lg">
+                <i class="fas fa-user-tag"></i>
+            </div>
+            <div>
+                <h3 class="text-2xl font-black text-white">Ismingizni kiriting</h3>
+                <p class="text-slate-400 text-xs sm:text-sm mt-1">Umumiy reytingda natijangiz ushbu nom bilan ko'rinadi</p>
+            </div>
+            <div>
+                <input type="text" id="usernameInput" maxlength="15" placeholder="Taxallus / Ism..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 text-center font-bold focus:outline-none focus:border-indigo-500 transition-colors">
+            </div>
+            <button onclick="saveUsername()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg transition-transform active:scale-95">
+                Saqlash va Boshlash
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="max-w-4xl w-full mx-auto p-4 flex-grow flex flex-col justify-center">
+
+        <!-- MENU / HOME VIEW -->
+        <div id="homeView" class="space-y-6 py-6">
+            <div class="text-center space-y-2">
+                <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                    O'zingizni <span class="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Sinab Ko'ring!</span>
+                </h2>
+                <p class="text-slate-400 max-w-md mx-auto text-sm sm:text-base">
+                    Reaktsiya tezligingiz, matimatik hisoblash va diqqatni jamlash qobiliyatingizni sinovdan o'tkazing.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8">
+                <!-- Mode 1 Card -->
+                <div onclick="startReactionMode()" class="group relative bg-slate-900 border border-slate-800 hover:border-indigo-500/50 rounded-3xl p-6 transition-all duration-300 hover:-translate-y-2 cursor-pointer shadow-xl overflow-hidden flex flex-col justify-between">
+                    <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/20 transition-all"></div>
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-white group-hover:text-indigo-400 transition-colors">Reaktsiya Tezligi</h3>
+                        <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                            Ekran yashil rangga kirganda tezda bosing. Millisekundlarda o'lchanadi.
+                        </p>
+                    </div>
+                    <div class="mt-6 flex justify-between items-center">
+                        <span class="text-xs font-semibold px-3 py-1 bg-indigo-500/10 text-indigo-400 rounded-full border border-indigo-500/20" id="homeBestReaction">Rekord: --</span>
+                        <span class="text-indigo-400 font-bold group-hover:translate-x-1 transition-transform">Boshlash &rarr;</span>
+                    </div>
+                </div>
+                <!-- Mode 2 Card -->
+                <div onclick="startMathMode()" class="group relative bg-slate-900 border border-slate-800 hover:border-emerald-500/50 rounded-3xl p-6 transition-all duration-300 hover:-translate-y-2 cursor-pointer shadow-xl overflow-hidden flex flex-col justify-between">
+                    <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-white group-hover:text-emerald-400 transition-colors">Tezkor Hisob-Kitob</h3>
+                        <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                            Har bir misol uchun 3 soniya vaqt beriladi. Maksimal to'g'ri javoblarni toping.
+                        </p>
+                    </div>
+                    <div class="mt-6 flex justify-between items-center">
+                        <span class="text-xs font-semibold px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20" id="homeBestMath">Rekord: 0</span>
+                        <span class="text-emerald-400 font-bold group-hover:translate-x-1 transition-transform">Boshlash &rarr;</span>
+                    </div>
+                </div>
+
+                <!-- Mode 3 Card -->
+                <div onclick="startStroopMode()" class="group relative bg-slate-900 border border-slate-800 hover:border-pink-500/50 rounded-3xl p-6 transition-all duration-300 hover:-translate-y-2 cursor-pointer shadow-xl overflow-hidden flex flex-col justify-between">
+                    <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-pink-500/10 rounded-full blur-2xl group-hover:bg-pink-500/20 transition-all"></div>
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-pink-500/20 border border-pink-500/30 text-pink-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-white group-hover:text-pink-400 transition-colors">Tezkor Rang va So'z</h3>
+                        <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                            So'zning o'zi va uning shrift rangi mos kelishini tezda aniqlang (Stroop effekti).
+                        </p>
+                    </div>
+                    <div class="mt-6 flex justify-between items-center">
+                        <span class="text-xs font-semibold px-3 py-1 bg-pink-500/10 text-pink-400 rounded-full border border-pink-500/20" id="homeBestStroop">Rekord: 0</span>
+                        <span class="text-pink-400 font-bold group-hover:translate-x-1 transition-transform">Boshlash &rarr;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REACTION SPEED GAME VIEW -->
+        <div id="reactionView" class="hidden flex flex-col items-center justify-center">
+            <div id="reactionBox" class="w-full h-96 sm:h-[450px] rounded-3xl bg-slate-900 border-2 border-slate-800 flex flex-col items-center justify-center text-center p-6 cursor-pointer transition-all duration-200 select-none shadow-2xl relative overflow-hidden">
+                <i id="reactionIcon" class="fas fa-hand-pointer text-5xl sm:text-6xl text-indigo-400 mb-4 animate-bounce"></i>
+                <h2 id="reactionTitle" class="text-2xl sm:text-4xl font-extrabold mb-3 text-white">Boshlash uchun bosing</h2>
+                <p id="reactionDesc" class="text-slate-400 text-sm sm:text-base max-w-sm">Ekran QIZIL rangdan YASHIL rangga o'zgarganda imkon qadar tezroq bosing!</p>
+                
+                <div id="reactionResult" class="hidden space-y-4">
+                    <span class="text-6xl sm:text-7xl font-black text-emerald-400 block" id="reactionTimeDisplay">0 ms</span>
+                    <p class="text-slate-300 font-medium" id="reactionComment">Juda tez!</p>
+                    <button onclick="event.stopPropagation(); resetReactionGame()" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg transition-transform active:scale-95">
+                        <i class="fas fa-redo mr-2"></i>Qayta urinish
+                    </button>
+                </div>
+            </div>
+            <button onclick="switchTab('home')" class="mt-4 text-slate-400 hover:text-white text-sm font-semibold flex items-center space-x-2">
+                <i class="fas fa-arrow-left"></i> <span>Bosh menyuga qaytish</span>
+            </button>
+        </div>
+
+        <!-- FAST MATH GAME VIEW -->
+        <div id="mathView" class="hidden flex flex-col items-center">
+            <div class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+                <!-- Score & Timer Header -->
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-slate-400 text-sm">Ball:</span>
+                        <span id="mathScore" class="text-2xl font-black text-emerald-400">0</span>
+                    </div>
+                    <div class="flex items-center space-x-2 bg-slate-800 px-3 py-1.5 rounded-full border border-slate-700">
+                        <i class="fas fa-heart text-red-500"></i>
+                        <span id="mathLives" class="text-sm font-bold">3</span>
+                    </div>
+                </div>
+
+                <!-- Timer Progress Bar -->
+                <div class="w-full bg-slate-800 h-3 rounded-full overflow-hidden mb-8 border border-slate-700/50">
+                    <div id="mathTimerBar" class="bg-gradient-to-r from-emerald-400 to-cyan-400 h-full w-full transition-all duration-100 linear"></div>
+                </div>
+
+                <!-- Equation Box -->
+                <div class="text-center py-6 bg-slate-950/60 rounded-2xl border border-slate-800/80 mb-8">
+                    <div id="mathEquation" class="text-4xl sm:text-6xl font-black text-white tracking-wider">
+                        12 + 7 = ?
+                    </div>
+                </div>
+
+                <!-- Options Grid -->
+                <div class="grid grid-cols-2 gap-4" id="mathOptions">
+                    <button class="math-opt-btn py-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-2xl font-bold border border-slate-700 transition-all active:scale-95">19</button>
+                    <button class="math-opt-btn py-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-2xl font-bold border border-slate-700 transition-all active:scale-95">21</button>
+                    <button class="math-opt-btn py-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-2xl font-bold border border-slate-700 transition-all active:scale-95">15</button>
+                    <button class="math-opt-btn py-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-2xl font-bold border border-slate-700 transition-all active:scale-95">18</button>
+                </div>
+            </div>
+
+            <!-- Game Over Modal Overlay for Math -->
+            <div id="mathGameOverModal" class="hidden absolute inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 max-w-sm w-full text-center space-y-6 shadow-2xl">
+                    <div class="w-16 h-16 bg-red-500/20 border border-red-500/30 rounded-2xl flex items-center justify-center text-red-400 text-3xl mx-auto">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-extrabold text-white">Vaqt Tugadi!</h3>
+                        <p class="text-slate-400 text-sm mt-1">Siz to'plagan umumiy ball:</p>
+                        <p class="text-5xl font-black text-emerald-400 mt-2" id="mathFinalScore">0</p>
+                    </div>
+                    <div class="space-y-3">
+                        <button onclick="startMathMode()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 font-bold rounded-xl text-white shadow-lg transition-transform active:scale-95">
+                            Qayta o'ynash
+                        </button>
+                        <button onclick="switchTab('home')" class="w-full py-3 bg-slate-800 hover:bg-slate-700 font-semibold rounded-xl text-slate-300 border border-slate-700">
+                            Menyuga qaytish
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="switchTab('home')" class="mt-4 text-slate-400 hover:text-white text-sm font-semibold flex items-center space-x-2">
+                <i class="fas fa-arrow-left"></i> <span>Bosh menyuga qaytish</span>
+            </button>
+        </div>
+
+        <!-- STROOP EFFECT GAME VIEW -->
+        <div id="stroopView" class="hidden flex flex-col items-center">
+            <div class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+                <!-- Score & Timer Header -->
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-slate-400 text-sm">Ball:</span>
+                        <span id="stroopScore" class="text-2xl font-black text-pink-400">0</span>
+                    </div>
+                    <div class="flex items-center space-x-2 bg-slate-800 px-3 py-1.5 rounded-full border border-slate-700">
+                        <i class="fas fa-clock text-pink-400"></i>
+                        <span id="stroopTimer" class="text-sm font-bold text-white">30s</span>
+                    </div>
+                </div>
+
+                <!-- Stroop Word Box -->
+                <div class="text-center py-10 bg-slate-950/60 rounded-2xl border border-slate-800/80 mb-8 flex flex-col items-center justify-center">
+                    <span class="text-xs uppercase tracking-widest text-slate-500 mb-2 font-semibold">Shrift Rangi Qaysi?</span>
+                    <div id="stroopWord" class="text-4xl sm:text-6xl font-black tracking-wide drop-shadow-md">
+                        QIZIL
+                    </div>
+                </div>
+
+                <!-- Options Buttons Grid -->
+                <div class="grid grid-cols-2 gap-4" id="stroopOptions">
+                    <!-- Dynamic Buttons -->
+                </div>
+            </div>
+
+            <!-- Game Over Modal Overlay for Stroop -->
+            <div id="stroopGameOverModal" class="hidden absolute inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 max-w-sm w-full text-center space-y-6 shadow-2xl">
+                    <div class="w-16 h-16 bg-pink-500/20 border border-pink-500/30 rounded-2xl flex items-center justify-center text-pink-400 text-3xl mx-auto">
+
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-extrabold text-white">O'yin Tugadi!</h3>
+                        <p class="text-slate-400 text-sm mt-1">Siz to'plagan umumiy ball:</p>
+                        <p class="text-5xl font-black text-pink-400 mt-2" id="stroopFinalScore">0</p>
+                    </div>
+                    <div class="space-y-3">
+                        <button onclick="startStroopMode()" class="w-full py-3 bg-pink-600 hover:bg-pink-500 font-bold rounded-xl text-white shadow-lg transition-transform active:scale-95">
+                            Qayta o'ynash
+                        </button>
+                        <button onclick="switchTab('home')" class="w-full py-3 bg-slate-800 hover:bg-slate-700 font-semibold rounded-xl text-slate-300 border border-slate-700">
+                            Menyuga qaytish
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="switchTab('home')" class="mt-4 text-slate-400 hover:text-white text-sm font-semibold flex items-center space-x-2">
+                <i class="fas fa-arrow-left"></i> <span>Bosh menyuga qaytish</span>
+            </button>
+        </div>
+
+        <!-- STATS / SCOREBOARD VIEW -->
+        <div id="statsView" class="hidden space-y-6">
+            <div class="text-center space-y-2">
+                <h2 class="text-3xl font-black text-white">Umumiy Reyting (Peshqadamlar)</h2>
+                <p class="text-slate-400 text-sm">Barcha ishtirokchilarning onlayn natijalari va o'rinlari</p>
+            </div>
+
+            <!-- Leaderboard Mode Selector Tabs -->
+            <div class="flex rounded-2xl bg-slate-900 p-1 border border-slate-800 max-w-md mx-auto text-xs sm:text-sm">
+                <button id="tabLeadReaction" onclick="switchLeaderboardTab('reaction')" class="flex-1 py-2.5 rounded-xl font-bold transition-all bg-indigo-600 text-white shadow">
+                    ⚡ Reaktsiya
+                </button>
+                <button id="tabLeadMath" onclick="switchLeaderboardTab('math')" class="flex-1 py-2.5 rounded-xl font-bold transition-all text-slate-400 hover:text-white">
+                    🧮 Hisob
+                </button>
+                <button id="tabLeadStroop" onclick="switchLeaderboardTab('stroop')" class="flex-1 py-2.5 rounded-xl font-bold transition-all text-slate-400 hover:text-white">
+                    🎨 Rang
+                </button>
+            </div>
+
+            <!-- Leaderboard Table -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl max-w-2xl mx-auto">
+                <div id="leaderboardList" class="space-y-3">
+                    <div class="text-center py-8 text-slate-500">
+                        <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
+                        <p class="text-sm">Natijalar yuklanmoqda...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center pt-2">
+                <button onclick="switchTab('home')" class="text-slate-400 hover:text-white text-sm font-semibold inline-flex items-center space-x-2">
+                    <i class="fas fa-arrow-left"></i> <span>Bosh menyuga qaytish</span>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full bg-slate-950 border-t border-slate-900 p-4 text-center text-xs text-slate-500">
+        <p>© 2026 Tezkor Reaktsiya O'yini. Barcha huquqlar himoyalangan.</p>
+    </footer>
+
+    <!-- Audio & Logic Scripts -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+ // Firebase Configuration
+        const appId = typeof app_id !== 'undefined' ? app_id : 'tezkor-o-yin';
+        const firebaseConfig = typeof firebase_config !== 'undefined' ? JSON.parse(firebase_config) : {
+            apiKey: "demo-api-key",
+            authDomain: "demo.firebaseapp.com",
+            projectId: "demo-project",
+            storageBucket: "demo.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+        let currentUserId = null;
+        let activeLeaderboardTab = 'reaction';
+        let allScoresData = [];
+
+        // Auth initialization
+        async function initAuth() {
+            try {
+                if (typeof initial_auth_token !== 'undefined' && initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                console.error("Auth error:", err);
+            }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                currentUserId = user.uid;
+                initLeaderboardListener();
+                loadUserLocalName();
+            }
+        });
+
+        initAuth();
+
+        // User profile setup
+        window.loadUserLocalName = function() {
+            let savedName = localStorage.getItem('tezkor_username');
+            if (!savedName) {
+                openNameModal();
+            } else {
+                document.getElementById('headerUserName').textContent = savedName;
+            }
+        }
+
+        window.openNameModal = function() {
+            document.getElementById('nameModal').classList.remove('hidden');
+            let current = localStorage.getItem('tezkor_username') || '';
+            document.getElementById('usernameInput').value = current;
+        }
+
+        window.saveUsername = function() {
+            let input = document.getElementById('usernameInput').value.trim();
+            if (!input) input = "O'yinchi_" + Math.floor(Math.random() * 899 + 100);
+            localStorage.setItem('tezkor_username', input);
+            document.getElementById('headerUserName').textContent = input;
+            document.getElementById('nameModal').classList.add('hidden');
+            
+            // Sync with DB if user exists
+            saveUserScoreToCloud();
+        }
+
+        // Save Score to Cloud (Rule 1 & Rule 2 compliant)
+        window.saveUserScoreToCloud = async function(modeChanged, newScore) {
+            if (!currentUser) return;
+            const userName = localStorage.getItem('tezkor_username') || "O'yinchi";
+            
+            const userDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'leaderboard', currentUserId);
+            
+            try {
+                const docSnap = await getDoc(userDocRef);
+                let existingData = docSnap.exists() ? docSnap.data() : { reaction: null, math: 0, stroop: 0 };
+                
+                if (modeChanged === 'reaction') {
+                    if (!existingData.reaction || newScore < existingData.reaction) {
+                        existingData.reaction = newScore;
+                    }
+                } else if (modeChanged === 'math') {
+                    if (newScore > (existingData.math || 0)) {
+                        existingData.math = newScore;
+                    }
+                } else if (modeChanged === 'stroop') {
+                    if (newScore > (existingData.stroop || 0)) {
+                        existingData.stroop = newScore;
+                    }
+                }
+                await setDoc(userDocRef, {
+                    uid: currentUserId,
+                    name: userName,
+                    reaction: existingData.reaction,
+                    math: existingData.math,
+                    stroop: existingData.stroop,
+                    updatedAt: Date.now()
+                }, { merge: true });
+
+            } catch (e) {
+                console.error("Firestore save error:", e);
+            }
+        }
+
+        // Live Leaderboard sync (Rule 2: Fetch simple collection, sort in JS)
+        /*function initLeaderboardListener() {
+            if (!currentUser) return;
+            const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'leaderboard');
+            
+            onSnapshot(colRef, (snapshot) => {
+                allScoresData = [];
+                snapshot.forEach(docSnap => {
+                    allScoresData.push(docSnap.data());
+                });
+                renderLeaderboard();
+            }, (error) => {
+                console.error("Leaderboard error:", error);
+            });
+        }*/activeLeaderboardTab
+        function initLeaderboardListener() {
+            // Avval darhol lokal natijalarni chiqarib turamiz (qotib qolmasligi uchun)
+            loadLocalLeaderboardFallback();
+
+            if (!currentUser) return;
+            
+            try {
+                const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'leaderboard');
+                
+                onSnapshot(colRef, (snapshot) => {
+                    allScoresData = [];
+                    snapshot.forEach(docSnap => {
+                        allScoresData.push(docSnap.data());
+                    });
+                    renderLeaderboard();
+                }, (error) => {
+                    console.error("Leaderboard error:", error);
+                });
+            } catch (err) {
+                console.error("Firebase init error:", err);
+            }
+        }
+
+        // Lokal zaxira funksiyasi (buni to'g'ridan-to'g'ri shu funksiyaning ostiga qo'yasiz)
+        function loadLocalLeaderboardFallback() {
+            const userName = localStorage.getItem('tezkor_username') || "O'yinchi";
+            const hsReaction = localStorage.getItem('hs_reaction');
+            const hsMath = localStorage.getItem('hs_math') || 0;
+            const hsStroop = localStorage.getItem('hs_stroop') || 0;
+
+            const localEntry = {
+                uid: currentUserId || 'local_user',
+                name: userName,
+                reaction: hsReaction ? parseInt(hsReaction) : null,
+                math: parseInt(hsMath),
+                stroop: parseInt(hsStroop),
+                updatedAt: Date.now()
+            };
+
+            let exists = allScoresData.some(item => item.uid === localEntry.uid);
+            if (!exists) {
+                allScoresData.push(localEntry);
+            }
+            
+            renderLeaderboard();
+        }
+
+        window.switchLeaderboardTab = function(mode) {
+            playSound('click');
+            activeLeaderboardTab = mode;
+            
+            // UI Button states
+            const btnR = document.getElementById('tabLeadReaction');
+            const btnM = document.getElementById('tabLeadMath');
+            const btnS = document.getElementById('tabLeadStroop');
+
+            [btnR, btnM, btnS].forEach(b => {
+                b.className = "flex-1 py-2.5 rounded-xl font-bold transition-all text-slate-400 hover:text-white";
+            });
+
+            if (mode === 'reaction') {
+                btnR.className = "flex-1 py-2.5 rounded-xl font-bold transition-all bg-indigo-600 text-white shadow";
+            } else if (mode === 'math') {
+                btnM.className = "flex-1 py-2.5 rounded-xl font-bold transition-all bg-emerald-600 text-white shadow";
+            } else if (mode === 'stroop') {
+                btnS.className = "flex-1 py-2.5 rounded-xl font-bold transition-all bg-pink-600 text-white shadow";
+            }
+
+            renderLeaderboard();
+        }
+
+        function renderLeaderboard() {
+            const listEl = document.getElementById('leaderboardList');
+            if (!listEl) return;
+
+            // Filter out entries with no score for this mode
+            let filtered = allScoresData.filter(item => {
+                if (activeLeaderboardTab === 'reaction') return item.reaction !== null && item.reaction !== undefined;
+                if (activeLeaderboardTab === 'math') return item.math !== undefined && item.math > 0;
+                if (activeLeaderboardTab === 'stroop') return item.stroop !== undefined && item.stroop > 0;
+                return false;
+            });
+
+            // Sort in memory
+            filtered.sort((a, b) => {
+                if (activeLeaderboardTab === 'reaction') {
+                    return a.reaction - b.reaction; // Lower ms is better
+                } else if (activeLeaderboardTab === 'math') {
+                    return b.math - a.math; // Higher score is better
+                } else {
+                    return b.stroop - a.stroop; // Higher score is better
+                }
+            });
+
+            if (filtered.length === 0) {
+                listEl.innerHTML = `<div class="text-center py-8 text-slate-500">Hozircha natijalar yo'q. Birinchi bo'lib o'ynang!</div>`;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach((item, index) => {
+                const isMe = item.uid === currentUserId;
+                let rankBadge = `<span class="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-800 text-slate-400 text-xs font-extrabold">${index + 1}</span>`;
+                if (index === 0) rankBadge = `<span class="w-7 h-7 flex items-center justify-center rounded-lg bg-amber-500/20 text-amber-400 text-base font-black">🥇</span>`;
+                if (index === 1) rankBadge = `<span class="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-300/20 text-slate-300 text-base font-black">🥈</span>`;
+                if (index === 2) rankBadge = `<span class="w-7 h-7 flex items-center justify-center rounded-lg bg-amber-700/20 text-amber-600 text-base font-black">🥉</span>`;
+
+                let scoreText = '';
+                if (activeLeaderboardTab === 'reaction') scoreText = `${item.reaction} ms`;
+                if (activeLeaderboardTab === 'math') scoreText = `${item.math} ball`;
+                if (activeLeaderboardTab === 'stroop') scoreText = `${item.stroop} ball`;
+
+                html += 
+                    `<div class="flex items-center justify-between p-3.5 rounded-xl transition-all ${isMe ? 'bg-indigo-600/20 border border-indigo-500/40' : 'bg-slate-950/60 border border-slate-800/80'}">
+                        <div class="flex items-center space-x-3">
+                            ${rankBadge}
+                            <div>
+                                <p class="text-sm font-bold ${isMe ? 'text-indigo-300' : 'text-white'}">${item.name || 'O\'yinchi'} ${isMe ? '<span class="text-[10px] px-1.5 py-0.5 bg-indigo-500/30 text-indigo-300 rounded ml-1">(Siz)</span>' : ''}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-black ${activeLeaderboardTab === 'reaction' ? 'text-indigo-400' : activeLeaderboardTab === 'math' ? 'text-emerald-400' : 'text-pink-400'}">${scoreText}</p>
+                        </div>
+                    </div>`
+                ;
+            });
+
+            listEl.innerHTML = html;
+        }
+
+        // Global functions overrides for score tracking
+        window.saveReactionScoreCloud = function(ms) {
+            window.saveUserScoreToCloud('reaction', ms);
+        }
+
+        window.saveMathScoreCloud = function(score) {
+            window.saveUserScoreToCloud('math', score);
+        }
+
+        window.saveStroopScoreCloud = function(score) {
+            window.saveUserScoreToCloud('stroop', score);
+        }
+    </script>
+
+    <script>
+        /* --- WEB AUDIO API SOUND SYSTEM --- */
+        let audioCtx = null;
+        let isSoundOn = true;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSound(type) {
+            if (!isSoundOn) return;
+            initAudio();
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.exponentialRampToValueAtTime(200, now + 0.05);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.05);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            } else if (type === 'correct') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(440, now);
+                osc.frequency.setValueAtTime(880, now + 0.1);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
+                
+                osc.start(now);
+                osc.stop(now + 0.25);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.setValueAtTime(110, now + 0.1);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            } else if (type === 'ready') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, now);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.15);
+                osc.start(now);
+                osc.stop(now + 0.15);
+            }
+        }
+
+        function toggleSound() {
+            isSoundOn = !isSoundOn;
+            const icon = document.getElementById('soundIcon');
+            if (isSoundOn) {
+                icon.className = 'fas fa-volume-up text-lg';
+            } else {
+                icon.className = 'fas fa-volume-mute text-lg text-slate-500';
+            }
+        }
+
+        /* --- NAVIGATION & LOCAL STORAGE --- */
+        /*function switchTab(tab) {
+            playSound('click');
+            // Hide all game over modals
+            document.getElementById('mathGameOverModal').classList.add('hidden');
+            document.getElementById('stroopGameOverModal').classList.add('hidden');
+
+            // Clear active timers
+            clearTimeout(reactionTimer);
+            clearInterval(mathTimerInterval);
+            clearInterval(stroopTimerInterval);
+
+            // Hide all views
+            document.getElementById('homeView').classList.add('hidden');
+            document.getElementById('reactionView').classList.add('hidden');
+            document.getElementById('mathView').classList.add('hidden');
+            document.getElementById('stroopView').classList.add('hidden');
+            document.getElementById('statsView').classList.add('hidden');
+
+            // Show selected
+            if (tab === 'home') {
+                document.getElementById('homeView').classList.remove('hidden');
+                updateHomeScores();
+            } else if (tab === 'stats') {
+                document.getElementById('statsView').classList.remove('hidden');
+                updateStatsDisplay();
+            }
+        }*/
+       function switchTab(tab) {
+            playSound('click');
+            // Hide all game over modals
+            document.getElementById('mathGameOverModal').classList.add('hidden');
+            document.getElementById('stroopGameOverModal').classList.add('hidden');
+
+            // Clear active timers
+            clearTimeout(reactionTimer);
+            clearInterval(mathTimerInterval);
+            clearInterval(stroopTimerInterval);
+
+            // Hide all views
+            document.getElementById('homeView').classList.add('hidden');
+            document.getElementById('reactionView').classList.add('hidden');
+            document.getElementById('mathView').classList.add('hidden');
+            document.getElementById('stroopView').classList.add('hidden');
+            document.getElementById('statsView').classList.add('hidden');
+
+            // Show selected
+            if (tab === 'home') {
+                document.getElementById('homeView').classList.remove('hidden');
+                updateHomeScores();
+            } else if (tab === 'stats') {
+                document.getElementById('statsView').classList.remove('hidden');
+                updateStatsDisplay();
+                // Reyting sahifasi ochilganda ma'lumotlarni chiqarishni majburlaymiz:
+                if (typeof renderLeaderboard === 'function') {
+                    renderLeaderboard();
+                }
+            }
+        }
+
+        function getHighScores() {
+            return {
+                reaction: localStorage.getItem('hs_reaction') || null,
+                math: localStorage.getItem('hs_math') || 0,
+                stroop: localStorage.getItem('hs_stroop') || 0
+            };
+        }
+
+        function updateHomeScores() {
+            const hs = getHighScores();
+            document.getElementById('homeBestReaction').textContent = hs.reaction ? `Rekord: ${hs.reaction} ms` : 'Rekord: --';
+            document.getElementById('homeBestMath').textContent = `Rekord: ${hs.math}`;
+            document.getElementById('homeBestStroop').textContent = `Rekord: ${hs.stroop}`;
+        }
+
+        function updateStatsDisplay() {
+            const hs = getHighScores();
+            document.getElementById('statReaction').textContent = hs.reaction ? `${hs.reaction} ms` : '--';
+            document.getElementById('statMath').textContent = hs.math;
+            document.getElementById('statStroop').textContent = hs.stroop;
+        }
+
+        function resetStats() {
+            playSound('click');
+            localStorage.removeItem('hs_reaction');
+            localStorage.removeItem('hs_math');
+            localStorage.removeItem('hs_stroop');
+            updateStatsDisplay();
+        }
+
+        /* --- MODE 1: REACTION SPEED GAME --- */
+        let reactionState = 'idle'; // idle, waiting, ready, finished
+        let reactionTimer = null;
+        let reactionStartTime = 0;
+
+        function startReactionMode() {
+            switchTab('none');
+            document.getElementById('reactionView').classList.remove('hidden');
+            resetReactionGame();
+        }
+        function resetReactionGame() {
+            clearTimeout(reactionTimer);
+            reactionState = 'idle';
+            const box = document.getElementById('reactionBox');
+            const icon = document.getElementById('reactionIcon');
+            const title = document.getElementById('reactionTitle');
+            const desc = document.getElementById('reactionDesc');
+            const result = document.getElementById('reactionResult');
+
+            box.className = "w-full h-96 sm:h-[450px] rounded-3xl bg-slate-900 border-2 border-slate-800 flex flex-col items-center justify-center text-center p-6 cursor-pointer transition-all duration-200 select-none shadow-2xl relative overflow-hidden";
+            icon.className = "fas fa-hand-pointer text-5xl sm:text-6xl text-indigo-400 mb-4 animate-bounce";
+            icon.classList.remove('hidden');
+            title.textContent = "Boshlash uchun bosing";
+            desc.textContent = "Ekran QIZIL rangdan YASHIL rangga o'zgarganda imkon qadar tezroq bosing!";
+            desc.classList.remove('hidden');
+            result.classList.add('hidden');
+        }
+
+        const reactionBox = document.getElementById('reactionBox');
+        reactionBox.addEventListener('click', handleReactionClick);
+
+        function handleReactionClick() {
+            initAudio();
+            const box = document.getElementById('reactionBox');
+            const icon = document.getElementById('reactionIcon');
+            const title = document.getElementById('reactionTitle');
+            const desc = document.getElementById('reactionDesc');
+            const result = document.getElementById('reactionResult');
+            const timeDisplay = document.getElementById('reactionTimeDisplay');
+            const commentDisplay = document.getElementById('reactionComment');
+
+            if (reactionState === 'idle') {
+                playSound('click');
+                reactionState = 'waiting';
+                box.className = "w-full h-96 sm:h-[450px] rounded-3xl bg-rose-600 border-4 border-rose-500 flex flex-col items-center justify-center text-center p-6 cursor-pointer transition-all duration-200 select-none shadow-2xl relative overflow-hidden";
+                icon.className = "fas fa-hourglass-half text-5xl sm:text-6xl text-white mb-4 animate-spin";
+                title.textContent = "Kuting...";
+                desc.textContent = "Yashil rang paydo bo'lishini kuting!";
+
+                const randomDelay = Math.floor(Math.random() * 3000) + 2000; // 2 to 5 seconds
+                reactionTimer = setTimeout(() => {
+                    reactionState = 'ready';
+                    reactionStartTime = Date.now();
+                    playSound('ready');
+                    box.className = "w-full h-96 sm:h-[450px] rounded-3xl bg-emerald-500 border-4 border-emerald-400 flex flex-col items-center justify-center text-center p-6 cursor-pointer transition-all duration-200 select-none shadow-2xl relative overflow-hidden glow-effect";
+                    icon.className = "fas fa-bolt text-6xl text-white mb-4 animate-ping";
+                    title.textContent = "BOSING!";
+                    desc.textContent = "Tezroq bosing!";
+                }, randomDelay);
+
+            } else if (reactionState === 'waiting') {
+                // Clicked too early
+                clearTimeout(reactionTimer);
+                reactionState = 'finished';
+                playSound('wrong');
+                box.className = "w-full h-96 sm:h-[450px] rounded-3xl bg-amber-600 border-4 border-amber-500 flex flex-col items-center justify-center text-center p-6 cursor-pointer transition-all duration-200 select-none shadow-2xl relative overflow-hidden shake-animation";
+                icon.className = "fas fa-exclamation-triangle text-5xl text-white mb-4";
+                title.textContent = "Juda shoshildingiz!";
+                desc.textContent = "Yashil rang chiqishidan oldin bosib qo'ydingiz. Qayta urinib ko'ring.";
+            } else if (reactionState === 'ready') {
+                // Successful reaction
+                const endTime = Date.now();
+                const reactionTime = endTime - reactionStartTime;
+                reactionState = 'finished';
+                playSound('correct');
+
+                // Save High Score
+                const currentHS = localStorage.getItem('hs_reaction');
+                if (!currentHS || reactionTime < parseInt(currentHS)) {
+                    localStorage.setItem('hs_reaction', reactionTime);
+                }
+
+                // Cloud Sync
+                if (window.saveReactionScoreCloud) {
+                    window.saveReactionScoreCloud(reactionTime);
+                }
+
+                box.className = "w-full h-96 sm:h-[450px] rounded-3xl bg-slate-900 border-2 border-indigo-500 flex flex-col items-center justify-center text-center p-6 cursor-pointer transition-all duration-200 select-none shadow-2xl relative overflow-hidden";
+                icon.classList.add('hidden');
+                title.textContent = "Natijangiz:";
+                desc.classList.add('hidden');
+                result.classList.remove('hidden');
+
+                timeDisplay.textContent = `${reactionTime} ms`;
+                
+                if (reactionTime < 200) {
+                    commentDisplay.textContent = "⚡ Fantastik! Yovvoyi reaktsiya!";
+                } else if (reactionTime < 280) {
+                    commentDisplay.textContent = "🎯 Ajoyib! O'rtachadan ancha yuqori!";
+                } else if (reactionTime < 380) {
+                    commentDisplay.textContent = "👍 Yaxshi, lekin tezlashishingiz mumkin.";
+                } else {
+                    commentDisplay.textContent = "🐢 Biraz sekinroq, diqqatni jamlang!";
+                }
+            } else if (reactionState === 'finished') {
+                resetReactionGame();
+            }
+        }
+
+
+        /* --- MODE 2: FAST MATH GAME --- */
+        let mathScore = 0;
+        let mathLives = 3;
+        let mathTimerInterval = null;
+        let mathTimeLeft = 3.0;
+        let currentCorrectAnswer = 0;
+
+        function startMathMode() {
+            switchTab('none');
+            document.getElementById('mathView').classList.remove('hidden');
+            mathScore = 0;
+            mathLives = 3;
+            document.getElementById('mathScore').textContent = mathScore;
+            document.getElementById('mathLives').textContent = mathLives;
+            nextMathQuestion();
+        }
+
+        function nextMathQuestion() {
+            if (mathLives <= 0) {
+                endMathGame();
+                return;
+            }
+
+            // Generate question based on difficulty
+            const ops = ['+', '-', '*'];
+            let op = ops[Math.floor(Math.random() * ops.length)];
+            let num1, num2;
+
+            if (op === '+') {
+                num1 = Math.floor(Math.random() * 50) + 1;
+                num2 = Math.floor(Math.random() * 50) + 1;
+                currentCorrectAnswer = num1 + num2;
+            } else if (op === '-') {
+                num1 = Math.floor(Math.random() * 50) + 10;
+                num2 = Math.floor(Math.random() * num1);
+                currentCorrectAnswer = num1 - num2;
+            } else {
+                num1 = Math.floor(Math.random() * 12) + 2;
+                num2 = Math.floor(Math.random() * 10) + 2;
+                currentCorrectAnswer = num1 * num2;
+            }
+
+            document.getElementById('mathEquation').textContent = `${num1} ${op === '*' ? '×' : op} ${num2} = ?`;
+
+            // Generate Options
+            const options = [currentCorrectAnswer];
+            while (options.length < 4) {
+                let offset = (Math.floor(Math.random() * 5) + 1) * (Math.random() < 0.5 ? 1 : -1);
+                let wrongOpt = currentCorrectAnswer + offset;
+                if (wrongOpt >= 0 && !options.includes(wrongOpt)) {
+                    options.push(wrongOpt);
+                }
+            }
+
+            // Shuffle Options
+            options.sort(() => Math.random() - 0.5);
+            const optionsContainer = document.getElementById('mathOptions');
+            optionsContainer.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "py-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-2xl font-bold border border-slate-700 transition-all active:scale-95 text-white shadow-md";
+                btn.textContent = opt;
+                btn.onclick = () => checkMathAnswer(opt);
+                optionsContainer.appendChild(btn);
+            });
+
+            // Start 3 second timer
+            clearInterval(mathTimerInterval);
+            mathTimeLeft = 3.0;
+            const timerBar = document.getElementById('mathTimerBar');
+            timerBar.style.width = '100%';
+
+            const startTime = Date.now();
+            const duration = 3000; // 3 seconds
+
+            mathTimerInterval = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                const remaining = Math.max(0, duration - elapsed);
+                const percentage = (remaining / duration) * 100;
+                timerBar.style.width = `${percentage}%`;
+
+                if (remaining <= 0) {
+                    clearInterval(mathTimerInterval);
+                    handleMathTimeOut();
+                }
+            }, 50);
+        }
+
+        function checkMathAnswer(selected) {
+            clearInterval(mathTimerInterval);
+            if (selected === currentCorrectAnswer) {
+                playSound('correct');
+                mathScore++;
+                document.getElementById('mathScore').textContent = mathScore;
+                nextMathQuestion();
+            } else {
+                playSound('wrong');
+                mathLives--;
+                document.getElementById('mathLives').textContent = mathLives;
+                if (mathLives > 0) {
+                    nextMathQuestion();
+                } else {
+                    endMathGame();
+                }
+            }
+        }
+
+        function handleMathTimeOut() {
+            playSound('wrong');
+            mathLives--;
+            document.getElementById('mathLives').textContent = mathLives;
+            if (mathLives > 0) {
+                nextMathQuestion();
+            } else {
+                endMathGame();
+            }
+        }
+
+        function endMathGame() {
+            clearInterval(mathTimerInterval);
+            playSound('wrong');
+
+            // Save high score
+            const currentHS = parseInt(localStorage.getItem('hs_math') || '0');
+            if (mathScore > currentHS) {
+                localStorage.setItem('hs_math', mathScore);
+            }
+
+            // Cloud Sync
+            if (window.saveMathScoreCloud) {
+                window.saveMathScoreCloud(mathScore);
+            }
+
+            document.getElementById('mathFinalScore').textContent = mathScore;
+            document.getElementById('mathGameOverModal').classList.remove('hidden');
+        }
+
+
+        /* --- MODE 3: STROOP EFFECT (WORD & COLOR MATCH) --- */
+        let stroopScore = 0;
+        let stroopTimerInterval = null;
+        let stroopTimeLeft = 30;
+        let currentCorrectColorName = '';
+
+        const colorList = [
+            { name: 'QIZIL', hex: '#ef4444' },
+            { name: 'YASHIL', hex: '#10b981' },
+            { name: 'KO\'K', hex: '#3b82f6' },
+            { name: 'SARIQ', hex: '#eab308' },
+            { name: 'BINAWSHA', hex: '#a855f7' },
+            { name: 'OLMA-RANG', hex: '#f97316' }
+        ];
+
+        function startStroopMode() {
+            switchTab('none');
+            document.getElementById('stroopView').classList.remove('hidden');
+            stroopScore = 0;
+            stroopTimeLeft = 30;
+            document.getElementById('stroopScore').textContent = stroopScore;
+            document.getElementById('stroopTimer').textContent = `${stroopTimeLeft}s`;
+
+            nextStroopQuestion();
+// Start 30s countdown timer
+            clearInterval(stroopTimerInterval);
+            stroopTimerInterval = setInterval(() => {
+                stroopTimeLeft--;
+                document.getElementById('stroopTimer').textContent = `${stroopTimeLeft}s`;
+                if (stroopTimeLeft <= 0) {
+                    endStroopGame();
+                }
+            }, 1000);
+        }
+
+        function nextStroopQuestion() {
+            // Pick random word text
+            const wordObj = colorList[Math.floor(Math.random() * colorList.length)];
+            // Pick random display color (font color)
+            const fontColorObj = colorList[Math.floor(Math.random() * colorList.length)];
+
+            currentCorrectColorName = fontColorObj.name;
+
+            const wordElement = document.getElementById('stroopWord');
+            wordElement.textContent = wordObj.name;
+            wordElement.style.color = fontColorObj.hex;
+
+            // Render buttons for user to choose the FONT COLOR name
+            const container = document.getElementById('stroopOptions');
+            container.innerHTML = '';
+
+            // Shuffle colors for options
+            const shuffled = [...colorList].sort(() => Math.random() - 0.5);
+
+            shuffled.forEach(c => {
+                const btn = document.createElement('button');
+                btn.className = "py-3.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-lg font-bold border border-slate-700 transition-all active:scale-95 text-white shadow-md flex items-center justify-center space-x-2";
+                btn.innerHTML = `<span class="w-4 h-4 rounded-full" style="background-color: ${c.hex}"></span> <span>${c.name}</span>`;
+                btn.onclick = () => checkStroopAnswer(c.name);
+                container.appendChild(btn);
+            });
+        }
+
+        function checkStroopAnswer(selectedName) {
+            if (selectedName === currentCorrectColorName) {
+                playSound('correct');
+                stroopScore += 10;
+                document.getElementById('stroopScore').textContent = stroopScore;
+            } else {
+                playSound('wrong');
+                stroopScore = Math.max(0, stroopScore - 5);
+                document.getElementById('stroopScore').textContent = stroopScore;
+            }
+            nextStroopQuestion();
+        }
+
+        function endStroopGame() {
+            clearInterval(stroopTimerInterval);
+            playSound('wrong');
+
+            // Save high score
+            const currentHS = parseInt(localStorage.getItem('hs_stroop') || '0');
+            if (stroopScore > currentHS) {
+                localStorage.setItem('hs_stroop', stroopScore);
+            }
+
+            // Cloud Sync
+            if (window.saveStroopScoreCloud) {
+                window.saveStroopScoreCloud(stroopScore);
+            }
+
+            document.getElementById('stroopFinalScore').textContent = stroopScore;
+            document.getElementById('stroopGameOverModal').classList.remove('hidden');
+        }
+
+        // Initialize display on load
+        window.onload = function() {
+            updateHomeScores();
+        };
+    </script>
+</body>
+</html>
+`
